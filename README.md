@@ -19,6 +19,8 @@ Installation Proecess
    Download and Install Visual Studio Code
    Install Extension such as Rest, C# Dev Kit, C# ,Sqlite
    From command palette.. .Net: Open Solution 
-   Run and Enjoy
+   Go into the project folder 
+   Run this command 'dotnet run'
+   Enjoy
 ```
     
