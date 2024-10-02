@@ -1,4 +1,15 @@
-# GET http://localhost:5150/games
+GET http://localhost:5150/games
 
 # by id 
-GET http://localhost:5150/games/1
+GET http://localhost:5150/games/4
+
+# post new game
+POST http://localhost:5150/games
+Content-Type: application/json
+
+{
+  "name": "Clash Of Clan",
+  "genre": "StoryBased",
+  "price": 1000,
+  "releaseDate": "2009-10-02"
+}
