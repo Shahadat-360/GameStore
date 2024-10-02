@@ -13,3 +13,19 @@ Content-Type: application/json
   "price": 1000,
   "releaseDate": "2009-10-02"
 }
+
+# PUT games 
+PUT http://localhost:5150/games/1
+Content-Type: application/json
+
+{
+    "id": 1,
+    "name": "Moto Gp",
+    "genre": "Racing",
+    "price": 100,
+    "releaseDate": "2006-10-02"
+}
+
+# testing for PUT 
+# by id 
+GET http://localhost:5150/games/1
