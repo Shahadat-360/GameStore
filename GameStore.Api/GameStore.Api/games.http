@@ -29,3 +29,7 @@ Content-Type: application/json
 # testing for PUT 
 # by id 
 GET http://localhost:5150/games/1
+
+
+# Delete game by id 
+DELETE http://localhost:5150/games/1
