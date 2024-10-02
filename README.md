@@ -4,13 +4,13 @@
 Game Store Application Using Asp.net Core 
 
 # Project Description
-CRUD Operations are perform using a small gaming project which clearning concept of CRUD using ASP.Net API.
+CRUD Operations are perform using a small gaming project which clearing concept of CRUD using ASP.Net API.
 
-Installation Proecess
+Installation Process
 
 ## Installation
 
-- Simply Download Download and Using Visual Studio open it and run it.
+- Simply Download Visual Studio and Using Visual Studio open it and run it.
 
 ### If want to install and run using Visual Studio Code then follow the given steps
 
