@@ -1,1 +1,4 @@
 GET http://localhost:5150/games
+
+# by id 
+GET http:://locahost:5150/games/1
