@@ -15,15 +15,14 @@ Content-Type: application/json
 }
 
 # PUT games 
-PUT http://localhost:5150/games/1
+PUT http://localhost:5150/games/2
 Content-Type: application/json
 
 {
-    "id": 1,
-    "name": "Moto Gp",
-    "genre": "Racing",
-    "price": 100,
-    "releaseDate": "2006-10-02"
+  "name": "Moto Gp",
+  "genre": "Racing",
+  "price": 100,
+  "releaseDate": "2006-10-02"
 }
 
 # testing for PUT 
