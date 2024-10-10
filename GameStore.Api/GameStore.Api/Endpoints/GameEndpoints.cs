@@ -2,95 +2,67 @@ using System;
 using GameStore.Api.Data;
 using GameStore.Api.Dtos;
 using GameStore.Api.Entities;
+using GameStore.Api.Mapping;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Api.Endpoints;
 
 public static class GameEndpoints
 {
     const string GetGameEndpointName = "GetGame";
-    private static List<GameDto> games = [
-        new GameDto(
-            1,
-            "Asphalt 8",
-            "Racing",
-            200,
-            new DateOnly(2006,10,2)
-        ),
-        new GameDto(
-            2,
-            "Asphalt 9",
-            "Racing",
-            300,
-            new DateOnly(2008,10,2)
-        ),
-        new GameDto(
-            3,
-            "COD",
-            "Fighting",
-            700,
-            new DateOnly(2010,10,2)
-        ),
-    ];
-
+    
     public static RouteGroupBuilder MapGetEndpoints(this WebApplication app)
     {
         var group = app.MapGroup("games")
                        .WithParameterValidation();
         // all games 
-        group.MapGet("/", () => games);
+        group.MapGet("/", (GameStoreDbContext dbContext) => 
+            dbContext.Games
+                        .Include(game=>game.Genre)
+                        .Select(game=>game.ToGameSummaryDto())
+                        .AsNoTracking());
 
         // games by Id 
-        group.MapGet("/{id}", (int id) =>
+        group.MapGet("/{id}", (int id,GameStoreDbContext dbContext) =>
         {
-            var game = games.Find(game => game.Id == id);
-            return game is null? Results.NotFound():Results.Ok(game);
+            Game? game = dbContext.Games.Find(id);
+            return game is null? 
+                Results.NotFound():Results.Ok(game.ToGameDetailsDto());
         })
         .WithName(GetGameEndpointName);
 
         // games post 
         group.MapPost("/", (CreateGameDto newGame,GameStoreDbContext dbContext) =>
         {
-            Game game = new()
-            {
-                Name = newGame.Name,
-                GenreId = newGame.GenreId,
-                Genre = dbContext.Genres.Find(newGame.GenreId),
-                Price = newGame.Price,
-                ReleaseDate=newGame.ReleaseDate
-            };
+            Game game = newGame.ToEntity();
+            
             dbContext.Games.Add(game);
             dbContext.SaveChanges();
 
-            GameDto gameDto = new(
-                game.Id,
-                game.Name,
-                game.Genre!.Name,
-                game.Price,
-                game.ReleaseDate
-            );
-            return Results.CreatedAtRoute(GetGameEndpointName, new { id = game.Id }, gameDto);
+            return Results.CreatedAtRoute(
+                GetGameEndpointName, 
+                new { id = game.Id }, 
+                game.ToGameDetailsDto());
         });
 
         // PUT games
-        group.MapPut("/{id}", (int id, UpdateGameDto UpdatedGame) =>
+        group.MapPut("/{id}", (int id, UpdateGameDto UpdatedGame,GameStoreDbContext dbContext) =>
         {
-            var Index = games.FindIndex(game => game.Id == id);
-
-            if (Index == -1) return Results.NotFound();
-            games[Index] = new GameDto(
-                id,
-                UpdatedGame.Name,
-                UpdatedGame.Genre,
-                UpdatedGame.Price,
-                UpdatedGame.ReleaseDate
-            );
+            var ExistingGame = dbContext.Games.Find(id);
+            if (ExistingGame is null) return Results.NotFound();
+            dbContext.Entry(ExistingGame)
+                        .CurrentValues
+                        .SetValues(UpdatedGame.ToEntity(id));
+            dbContext.SaveChanges();
             return Results.NoContent();
         });
 
         // DELETE game 
-        group.MapDelete("/{id}", (int id) =>
+        group.MapDelete("/{id}", (int id,GameStoreDbContext dbContext) =>
         {
-            games.RemoveAll(game => game.Id == id);
+            dbContext.Games
+                     .Where(game => game.Id == id)
+                     .ExecuteDelete();
             return Results.NoContent();
         });
 
