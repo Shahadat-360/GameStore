@@ -8,8 +8,8 @@ POST http://localhost:5150/games
 Content-Type: application/json
 
 {
-  "name": "Clash Of Clan",
-  "genre": "StoryBased",
+  "name": "MineCraft",
+  "genreId": 5,
   "price": 1000,
   "releaseDate": "2009-10-02"
 }
