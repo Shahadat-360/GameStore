@@ -9,13 +9,13 @@ Content-Type: application/json
 
 {
   "name": "Final Fantasy XIV",
-  "genreId": 2,
+  "genreId": 5,
   "price": 59.99,
   "releaseDate": "2010-09-30"
 }
 
 # PUT games 
-PUT http://localhost:5150/games/3
+PUT http://localhost:5150/games/2
 Content-Type: application/json
 
 {
@@ -31,4 +31,4 @@ GET http://localhost:5150/games/1
 
 
 # Delete game by id 
-DELETE http://localhost:5150/games/6
+DELETE http://localhost:5150/games/2
